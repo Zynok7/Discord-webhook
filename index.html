@@ -1,1 +1,73 @@
-data:text/html,<input%20id=w%20placeholder='Webhook%20URL'><br><textarea%20id=m%20placeholder='Nachricht'></textarea><br><button%20onclick="fetch(document.getElementById('w').value,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:document.getElementById('m').value})}).then(a=>alert('✅%20Gesendet')).catch(a=>alert('❌%20Fehler'))">Senden</button>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webhook Sender</title>
+<style>
+body {
+  background: #0b0b10;
+  color: white;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+}
+
+input, textarea, button {
+  width: 300px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #7c7cff;
+}
+
+button:hover {
+  background: #7c7cff;
+  color: black;
+}
+</style>
+</head>
+<body>
+
+<h2>Webhook Sender</h2>
+
+<input id="w" placeholder="Webhook URL">
+<textarea id="m" placeholder="Nachricht" rows="4"></textarea>
+<button onclick="sendWebhook()">Senden</button>
+
+<script>
+function sendWebhook() {
+  const url = document.getElementById('w').value;
+  const message = document.getElementById('m').value;
+
+  if (!url || !message) {
+    alert('Bitte Webhook URL und Nachricht ausfüllen!');
+    return;
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({content: message})
+  })
+  .then(res => {
+    if(res.ok) alert('✅ Gesendet');
+    else alert('❌ Fehler: ' + res.status);
+  })
+  .catch(err => {
+    alert('❌ Fehler: ' + err);
+  });
+}
+</script>
+
+</body>
+</html>
